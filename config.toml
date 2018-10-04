@@ -3,7 +3,7 @@
 # And see https://gohugo.io/getting-started/configuration/ .
 
 baseURL = "https://praying.github.io"
-title = "Jane - A super concise theme for Hugo"
+title = "湖心小筑 - Praying's Blog"
 enableRobotsTXT = true
 enableEmoji = true
 theme = "jane"
