@@ -6,7 +6,7 @@ draft: true
 
 看了B站一个外国小哥讲解的视频，随手撸了一个，只用了一个测试，不保证完全正确，仅供参考。
 [B 站视频链接](https://www.bilibili.com/video/av3246487?from=search&seid=12331553402289750602)
-```
+```cpp
 #include <iostream>
 #include <string>
 #include <vector>
