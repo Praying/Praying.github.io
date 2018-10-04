@@ -14,7 +14,7 @@ install:
     - rm -rf public 2> /dev/null
 
 script:
-    - hugo
+    - hugo -D
     #- echo 'axdlog.com' > public/CNAME
 
 deploy:
