@@ -67,6 +67,8 @@ defaultContentLanguage = "zh-cn"           # Default language to use
   # The date format to use; for a list of valid formats, see https://gohugo.io/functions/format/
   dateFormatToUse = "2006-01-02"
 
+  changyanAppid = "cytQK2c1T"        # Changyan app id             # 畅言
+  changyanAppkey = "c5cacb330ec199dbba79c597297fdb1c"       # Changyan app key
   # 一些全局开关，你也可以在每一篇内容的 front matter 中针对单篇内容关闭或开启某些功能，在 archetypes/default.md 查看更多信息。
   # Some global options, you can also close or open something in front matter for a single post, see more information from `archetypes/default.md`.
   toc = true                                                                            # 是否开启目录
