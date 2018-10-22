@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>湖心小筑 - Praying&#39;s Blog</title>
+    <link>https://praying.github.io/</link>
+    <description>Recent content on 湖心小筑 - Praying&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 04 Oct 2018 17:34:10 +0800</lastBuildDate>
+    
+        <atom:link href="https://praying.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>二叉树非递归遍历实现</title>
+      <link>https://praying.github.io/post/%E4%BA%8C%E5%8F%89%E6%A0%91%E9%9D%9E%E9%80%92%E5%BD%92%E9%81%8D%E5%8E%86%E5%AE%9E%E7%8E%B0/</link>
+      <pubDate>Thu, 04 Oct 2018 17:34:10 +0800</pubDate>
+      
+      <guid>https://praying.github.io/post/%E4%BA%8C%E5%8F%89%E6%A0%91%E9%9D%9E%E9%80%92%E5%BD%92%E9%81%8D%E5%8E%86%E5%AE%9E%E7%8E%B0/</guid>
+      
+        <description>
+
+&lt;h4 id=&#34;主要是前序-中序和后序的非递归遍历&#34;&gt;主要是前序，中序和后序的非递归遍历&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;
+#include &amp;lt;gtest/gtest.h&amp;gt;
+
+#include &amp;lt;stack&amp;gt;
+#include &amp;lt;memory&amp;gt;
+
+template&amp;lt;typename T&amp;gt;
+struct BTNode {
+    BTNode *left = nullptr;
+    BTNode *right = nullptr;
+    T data;
+};
+
+template&amp;lt;typename T&amp;gt;
+void visit(BTNode&amp;lt;T&amp;gt; *node, std::vector&amp;lt;T&amp;gt; &amp;amp;result) {
+    if (node)
+        result.push_back(node-&amp;gt;data);
+}
+
+template&amp;lt;typename T&amp;gt;
+void pre_order_non_recursion(BTNode&amp;lt;T&amp;gt; *node, std::vector&amp;lt;T&amp;gt; &amp;amp;result) {
+    if (nullptr == node) {
+        return;
+    }
+    std::stack&amp;lt;BTNode&amp;lt;T&amp;gt; *&amp;gt; node_stack;
+    node_stack.push(node);
+    while (!node_stack.empty()) {
+        BTNode&amp;lt;T&amp;gt; *pop_node = node_stack.top();
+        node_stack.pop();
+        visit(pop_node, result);
+        if (pop_node &amp;amp;&amp;amp; nullptr != pop_node-&amp;gt;right) {
+            node_stack.push(pop_node-&amp;gt;right);
+        }
+        if (pop_node &amp;amp;&amp;amp; nullptr != pop_node-&amp;gt;left) {
+            node_stack.push(pop_node-&amp;gt;left);
+        }
+    }
+}
+
+template&amp;lt;typename T&amp;gt;
+void mid_order_non_recursion(BTNode&amp;lt;T&amp;gt; *node, std::vector&amp;lt;T&amp;gt; &amp;amp;result) {
+    if (nullptr == node) {
+        return;
+    }
+    std::stack&amp;lt;BTNode&amp;lt;T&amp;gt; *&amp;gt; node_stack;
+    node_stack.push(node);
+    BTNode&amp;lt;T&amp;gt; *top_node = node_stack.top();
+    while (top_node &amp;amp;&amp;amp; top_node-&amp;gt;left) {
+        node_stack.push(top_node-&amp;gt;left);
+        top_node = top_node-&amp;gt;left;
+    }
+    while (!node_stack.empty()) {
+        top_node = node_stack.top();
+        node_stack.pop();
+        visit(top_node, result);
+        if (top_node &amp;amp;&amp;amp; top_node-&amp;gt;right) {
+            node_stack.push(top_node-&amp;gt;right);
+            top_node = node_stack.top();
+            while (top_node &amp;amp;&amp;amp; top_node-&amp;gt;left) {
+                node_stack.push(top_node-&amp;gt;left);
+                top_node = top_node-&amp;gt;left;
+            }
+        }
+    }
+}
+
+template &amp;lt;typename T&amp;gt;
+void post_order_non_recursion(BTNode&amp;lt;T&amp;gt;* node, std::vector&amp;lt;T&amp;gt;&amp;amp; result){
+    if(nullptr == node){
+        return;
+    }
+    std::stack&amp;lt;BTNode&amp;lt;T&amp;gt;*&amp;gt; stack_first;
+    std::stack&amp;lt;BTNode&amp;lt;T&amp;gt;*&amp;gt; stack_second;
+    stack_first.push(node);
+    while(!stack_first.empty()){
+        BTNode&amp;lt;T&amp;gt;* top_node = stack_first.top();
+        stack_first.pop();
+        stack_second.push(top_node);
+        if(top_node&amp;amp;&amp;amp; top_node-&amp;gt;left){
+            stack_first.push(top_node-&amp;gt;left);
+        }
+        if(top_node&amp;amp;&amp;amp;top_node-&amp;gt;right){
+            stack_first.push(top_node-&amp;gt;right);
+        }
+    }
+    while(!stack_second.empty()){
+        BTNode&amp;lt;T&amp;gt;* top_node = stack_second.top();
+        stack_second.pop();
+        visit(top_node,result);
+    }
+}
+
+/*                 1
+ *
+ *          2            3
+ *
+ *      4      5      6      7
+ *
+ *  8
+ */
+#define BUILD_SIMPLE_BINARY_TREE \
+    auto node1 = std::make_shared&amp;lt;BTNode&amp;lt;int&amp;gt;&amp;gt;();node1-&amp;gt;data=1; \
+    auto node2 = std::make_shared&amp;lt;BTNode&amp;lt;int&amp;gt;&amp;gt;();node2-&amp;gt;data=2; \
+    auto node3 = std::make_shared&amp;lt;BTNode&amp;lt;int&amp;gt;&amp;gt;();node3-&amp;gt;data=3; \
+    auto node4 = std::make_shared&amp;lt;BTNode&amp;lt;int&amp;gt;&amp;gt;();node4-&amp;gt;data=4; \
+    auto node5 = std::make_shared&amp;lt;BTNode&amp;lt;int&amp;gt;&amp;gt;();node5-&amp;gt;data=5; \
+    auto node6 = std::make_shared&amp;lt;BTNode&amp;lt;int&amp;gt;&amp;gt;();node6-&amp;gt;data=6; \
+    auto node7 = std::make_shared&amp;lt;BTNode&amp;lt;int&amp;gt;&amp;gt;();node7-&amp;gt;data=7; \
+    auto node8 = std::make_shared&amp;lt;BTNode&amp;lt;int&amp;gt;&amp;gt;();node8-&amp;gt;data=8; \
+    node1-&amp;gt;left=node2.get();\
+    node1-&amp;gt;right=node3.get();\
+    node2-&amp;gt;left=node4.get();\
+    node2-&amp;gt;right=node5.get();\
+    node3-&amp;gt;left=node6.get();\
+    node3-&amp;gt;right=node7.get();\
+    node4-&amp;gt;left = node8.get();
+
+TEST(BinTree_Traverse, BinTree_Traverse_PreOrderNonRecursion) {
+    BUILD_SIMPLE_BINARY_TREE
+    std::vector&amp;lt;int&amp;gt; expect_result = {1, 2, 4, 8, 5, 3, 6, 7};
+    std::vector&amp;lt;int&amp;gt; result;
+    pre_order_non_recursion&amp;lt;int&amp;gt;(node1.get(), result);
+    EXPECT_EQ(expect_result, result);
+}
+
+TEST(BinTree_Traverse, BinTree_Traverse_MidOrderNonRecursion) {
+    BUILD_SIMPLE_BINARY_TREE
+    std::vector&amp;lt;int&amp;gt; expect_result = {8, 4, 2, 5, 1, 6, 3, 7};
+    std::vector&amp;lt;int&amp;gt; result;
+    mid_order_non_recursion&amp;lt;int&amp;gt;(node1.get(), result);
+    EXPECT_EQ(expect_result, result);
+}
+
+TEST(BinTree_Traverse, BinTree_Traverse_PostOrderNonRecursion) {
+    BUILD_SIMPLE_BINARY_TREE
+    std::vector&amp;lt;int&amp;gt; expect_result = {8, 4, 5,2,6,7,3,1};
+    std::vector&amp;lt;int&amp;gt; result;
+    post_order_non_recursion&amp;lt;int&amp;gt;(node1.get(), result);
+    EXPECT_EQ(expect_result, result);
+}
+
+
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>KMP算法简单实现</title>
+      <link>https://praying.github.io/post/kmp%E7%AE%97%E6%B3%95%E7%AE%80%E5%8D%95%E5%AE%9E%E7%8E%B0/</link>
+      <pubDate>Thu, 04 Oct 2018 17:32:30 +0800</pubDate>
+      
+      <guid>https://praying.github.io/post/kmp%E7%AE%97%E6%B3%95%E7%AE%80%E5%8D%95%E5%AE%9E%E7%8E%B0/</guid>
+      
+        <description>&lt;p&gt;看了B站一个外国小哥讲解的视频，随手撸了一个，只用了一个测试，不保证完全正确，仅供参考。
+&lt;a href=&#34;https://www.bilibili.com/video/av3246487?from=search&amp;amp;seid=12331553402289750602&#34;&gt;B 站视频链接&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;string&amp;gt;
+#include &amp;lt;vector&amp;gt;
+
+using namespace std;
+
+void constructNext(const string&amp;amp; pattern, vector&amp;lt;int&amp;gt;&amp;amp; next){
+    next.clear();
+    next.resize(pattern.size());
+    int j = 0;
+    int i = 1;
+    int count = 0;
+    while(i&amp;lt;pattern.size()){
+        if(pattern[i]==pattern[j]){
+            ++count;
+            next[i] = count;
+            ++j;
+            ++i;
+            continue;
+        }
+        count = 0;
+        if(j&amp;gt;0){
+            j=next[j-1];
+            count=next[j];
+            continue;
+        }
+        ++i;
+    }
+}
+
+void printNext(const vector&amp;lt;int&amp;gt;&amp;amp; next){
+    for(auto&amp;amp; val:next){
+        std::cout&amp;lt;&amp;lt;val&amp;lt;&amp;lt;&#39;\t&#39;;
+    }
+    std::cout&amp;lt;&amp;lt;std::endl;
+}
+
+int kmpSearch(const string&amp;amp; source, const string&amp;amp; pattern){
+    vector&amp;lt;int&amp;gt; next;
+    constructNext(pattern,next);
+    printNext(next);
+    int sourceIt = 0;
+    int patternIt = 0;
+    while(sourceIt&amp;lt;source.size() &amp;amp;&amp;amp; patternIt &amp;lt; pattern.size()){
+        if(source[sourceIt] == pattern[patternIt]){
+            ++sourceIt;
+            ++patternIt;
+            continue;
+        }
+        if(patternIt&amp;gt;0){
+            patternIt=next[patternIt-1];
+            continue;
+        }
+        ++sourceIt;
+    }
+    return patternIt==pattern.size()?(sourceIt-patternIt):0;
+}
+
+
+int main() {
+    string source=&amp;quot;abxabcabcaby&amp;quot;;
+    string pattern =&amp;quot;abcaby&amp;quot;;
+    int match = kmpSearch(source, pattern);
+    std::cout&amp;lt;&amp;lt;&amp;quot;the match position is: &amp;quot;&amp;lt;&amp;lt;match &amp;lt;&amp;lt; std::endl;
+    return 0;
+}
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+      
+    </item>
+    
+  </channel>
+</rss>

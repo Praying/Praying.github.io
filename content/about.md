@@ -1,5 +1,5 @@
 ---
-title: "About"
+title: "关于"
 date: 2018-10-04T21:38:52+08:00
 lastmod: 2018-10-04T21:41:52+08:00
 menu: "main"
