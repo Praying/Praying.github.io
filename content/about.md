@@ -9,6 +9,8 @@ weight: 50
 comment: false
 mathjax: false
 ---
-fans of cpp.
-that's all.
+Praying 
 
+计算机专业
+
+写得一手烂代码
