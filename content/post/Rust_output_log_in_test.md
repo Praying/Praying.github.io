@@ -16,9 +16,11 @@ fn test_logger() {
 }
 ```
 使用 
+
 >cargo test 
 
 运行测试代码时，测试通过，但是没有日志输出。然后在Reddit看到，应该用下面这条命令
+
 > cargo test -- --nocapture
 
 - [Reddit链接](https://www.reddit.com/r/rust/comments/7up0bm/show_logging_output_during_test_runs/
