@@ -1,0 +1,2 @@
+User-agent: *
+Sitemap: https://praying.github.io/sitemap.xml
