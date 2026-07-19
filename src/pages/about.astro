@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE_TITLE } from '../consts';
+---
+
+<Base title="关于">
+  <header class="site-header site-header--compact">
+    <a class="wordmark wordmark--link" href="/"
+      ><span class="seal" aria-hidden="true"></span>{SITE_TITLE}</a
+    >
+  </header>
+  <main>
+    <article>
+      <header class="post-header">
+        <h1>关于</h1>
+      </header>
+      <div class="prose">
+        <p>我是 Praying，一个写代码的人。</p>
+        <p>
+          这里是我的纸上空间：不放碎片，只放想清楚之后写下的文字。关于技术、生活，以及一切值得多想一会儿的事。
+        </p>
+        <p>
+          若文字引起了你的回响，欢迎来 <a href="https://github.com/Praying">GitHub</a>
+          找我，或通过 <a href="/rss.xml">RSS</a> 订阅这里。
+        </p>
+      </div>
+    </article>
+  </main>
+</Base>
