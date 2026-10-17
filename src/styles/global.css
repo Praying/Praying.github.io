@@ -1,26 +1,26 @@
 /* ==========================================================================
-   湖心小筑 · 白纸与朱印
-   一张米白的纸，满纸墨色，一方朱印。除此之外，别无装饰。
+   湖心小筑 · 羊皮纸与朱砂
+   一张做旧的羊皮纸，满纸沉墨，一方朱砂。除此之外，别无装饰。
    ========================================================================== */
 
 :root {
-  /* 纸与墨 —— Anthropic 的暖白纸面与暖黑墨色 */
-  --paper: #faf9f5;
-  --paper-warm: #f0eee6;
-  --ink: #1f1e1d;
-  --ink-soft: #737065;
+  /* 纸与墨 —— 做旧的羊皮纸面与深褐的墨色 */
+  --paper: #efe3c8;
+  --paper-deep: #e4d2ab;
+  --ink: #3a2c18;
+  --ink-soft: #6b5636;
 
-  /* 朱印 —— Anthropic 陶土色，只落三点：站名旁、悬停时、选中时 */
-  --clay: #d97757;
-  --clay-deep: #b85c3e;
+  /* 朱砂 —— 只落三点：站名旁、悬停时、选中时 */
+  --clay: #9e3325;
+  --clay-deep: #7e2418;
 
-  /* 发丝线：墨色 10% 的透明分隔 */
-  --hairline: color-mix(in srgb, var(--ink) 9%, transparent);
+  /* 发丝线：墨色 14% 的透明分隔，在旧纸上仍可辨 */
+  --hairline: color-mix(in srgb, var(--ink) 14%, transparent);
 
   /* 行宽：约 36 个汉字 —— 中文阅读的最舒适视幅 */
   --measure: 36rem;
 
-  --font-serif: 'Source Serif 4', 'Noto Serif SC', 'Songti SC', 'STSong', 'SimSun', serif;
+  --font-serif: 'Source Serif 4', 'Noto Serif SC', Georgia, 'Songti SC', 'STSong', 'SimSun', serif;
   --font-mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
 }
 
@@ -38,6 +38,7 @@
 
 html {
   font-size: 17.5px;
+  background-color: var(--paper);
   -webkit-text-size-adjust: 100%;
 }
 
@@ -48,7 +49,15 @@ html {
 }
 
 body {
+  isolation: isolate; /* 让纸纹沉在文字之下 */
+  min-height: 100vh;
+  min-height: 100svh;
   background-color: var(--paper);
+  /* 岁月的斑驳：几团深深浅浅的旧痕 */
+  background-image:
+    radial-gradient(1100px 700px at 12% 6%, rgba(120, 84, 38, 0.05), transparent 60%),
+    radial-gradient(1300px 900px at 88% 96%, rgba(120, 84, 38, 0.06), transparent 65%),
+    radial-gradient(820px 620px at 72% 24%, rgba(255, 246, 222, 0.4), transparent 70%);
   color: var(--ink);
   font-family: var(--font-serif);
   line-height: 1.9;
@@ -58,7 +67,31 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* 选中文字的一刻，纸面落下一枚朱印 */
+/* 纸的肌理：一整层极淡的颗粒，压在字下，不夺墨色 */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.28  0 0 0 0 0.19  0 0 0 0 0.07  0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* 纸的边缘：经年的茶色晕染 */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 120% 108% at 50% 50%,
+    transparent 56%,
+    rgba(101, 67, 33, 0.13) 100%
+  );
+}
+
+/* 选中文字的一刻，纸上落下一枚朱砂 */
 ::selection {
   background-color: var(--clay);
   color: var(--paper);
@@ -70,7 +103,7 @@ body {
 }
 
 /* --------------------------------------------------------------------------
-   版面骨架：一列白纸，天地留白
+   版面骨架：一列旧纸，天地留白
    -------------------------------------------------------------------------- */
 
 .page {
@@ -80,7 +113,7 @@ body {
 }
 
 /* --------------------------------------------------------------------------
-   站名与朱印
+   站名与朱砂印
    -------------------------------------------------------------------------- */
 
 .seal {
@@ -88,7 +121,12 @@ body {
   width: 0.55em;
   height: 0.55em;
   margin-right: 0.65em;
-  background-color: var(--clay);
+  border-radius: 1px;
+  /* 印泥的质感：着色不匀，边缘沉色 */
+  background:
+    radial-gradient(circle at 35% 32%, rgba(255, 235, 210, 0.18), transparent 55%),
+    radial-gradient(circle at 70% 76%, rgba(64, 14, 8, 0.22), transparent 62%),
+    var(--clay);
   transform: translateY(-0.04em);
 }
 
@@ -213,6 +251,15 @@ body {
   text-justify: inter-ideograph;
 }
 
+/* 开篇的首字，如旧书的起首 —— 只在文章页落下 */
+.prose--drop > p:first-child::first-letter {
+  float: left;
+  font-size: 3.6em;
+  line-height: 1;
+  font-weight: 400;
+  padding: 0.04em 0.16em 0 0;
+}
+
 .prose h2,
 .prose h3,
 .prose h4 {
@@ -234,11 +281,11 @@ body {
   font-size: 1rem;
 }
 
-/* 链接：墨色为本，一线陶土色的下划线，悬停时整句染成陶土 */
+/* 链接：墨色为本，一线朱砂的下划线，悬停时整句染成朱砂 */
 .prose a {
   color: inherit;
   text-decoration-line: underline;
-  text-decoration-color: color-mix(in srgb, var(--clay) 45%, transparent);
+  text-decoration-color: color-mix(in srgb, var(--clay) 50%, transparent);
   text-decoration-thickness: 1px;
   text-underline-offset: 0.22em;
   transition:
@@ -290,11 +337,11 @@ body {
   color: var(--ink-soft);
 }
 
-/* 代码：米白底，等宽字，安安静静地躺在纸上 */
+/* 代码：做旧的深纸底，等宽字，安安静静地躺在纸上 */
 .prose code {
   font-family: var(--font-mono);
   font-size: 0.84em;
-  background-color: var(--paper-warm);
+  background-color: var(--paper-deep);
   padding: 0.12em 0.38em;
   border-radius: 3px;
 }
@@ -302,7 +349,7 @@ body {
 .prose pre {
   margin-block: 1.8em;
   padding: 1.2em 1.4em;
-  background-color: var(--paper-warm) !important;
+  background-color: var(--paper-deep) !important;
   border-radius: 4px;
   overflow-x: auto;
   font-size: 0.8rem;
@@ -331,6 +378,7 @@ body {
 
 /* --------------------------------------------------------------------------
    上一篇 / 下一篇：读完一页，翻向下一页
+   （单篇文章时，发丝线之下留一行归途）
    -------------------------------------------------------------------------- */
 
 .post-nav {
@@ -372,6 +420,23 @@ body {
   color: var(--clay-deep);
 }
 
+/* 只有单篇文章时：发丝线之下，一行归途 */
+.post-nav--solo {
+  justify-content: center;
+}
+
+.post-nav__home {
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  color: var(--ink-soft);
+  text-decoration: none;
+  transition: color 160ms ease;
+}
+
+.post-nav__home:hover {
+  color: var(--clay-deep);
+}
+
 /* --------------------------------------------------------------------------
    页脚：一行淡墨
    -------------------------------------------------------------------------- */
@@ -401,7 +466,7 @@ body {
 }
 
 /* --------------------------------------------------------------------------
-   404：白纸的边缘
+   404：纸的边缘
    -------------------------------------------------------------------------- */
 
 .not-found {
@@ -418,7 +483,7 @@ body {
 .not-found a {
   color: var(--ink);
   text-decoration-line: underline;
-  text-decoration-color: color-mix(in srgb, var(--clay) 45%, transparent);
+  text-decoration-color: color-mix(in srgb, var(--clay) 50%, transparent);
   text-underline-offset: 0.22em;
 }
 
@@ -427,15 +492,37 @@ body {
 }
 
 /* --------------------------------------------------------------------------
+   动效：纸页摊开的一瞬，此后归于安静
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  .page {
+    animation: page-in 240ms ease-out both;
+  }
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* --------------------------------------------------------------------------
    打印：还给真正的纸
    -------------------------------------------------------------------------- */
 
 @media print {
+  html,
   body {
     background: #fff;
     color: #000;
   }
 
+  body::before,
+  body::after,
   .site-header--compact,
   .site-footer,
   .post-nav {

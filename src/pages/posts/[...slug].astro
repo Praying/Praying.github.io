@@ -36,12 +36,12 @@ const dateText = `${d.getUTCFullYear()} 年 ${d.getUTCMonth() + 1} 月 ${d.getUT
         <h1>{post.data.title}</h1>
         <time datetime={d.toISOString().slice(0, 10)}>{dateText}</time>
       </header>
-      <div class="prose">
+      <div class="prose prose--drop">
         <Content />
       </div>
     </article>
     {
-      (newer || older) && (
+      newer || older ? (
         <nav class="post-nav" aria-label="继续阅读">
           {newer ? (
             <a class="post-nav__item post-nav__item--newer" href={`/posts/${newer.id}/`}>
@@ -57,6 +57,10 @@ const dateText = `${d.getUTCFullYear()} 年 ${d.getUTCMonth() + 1} 月 ${d.getUT
               <span class="post-nav__title">{older.data.title}</span>
             </a>
           )}
+        </nav>
+      ) : (
+        <nav class="post-nav post-nav--solo" aria-label="返回时间线">
+          <a class="post-nav__home" href="/">回到时间线</a>
         </nav>
       )
     }
